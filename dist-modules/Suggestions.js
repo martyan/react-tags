@@ -55,7 +55,7 @@ var Suggestions = function (_Component) {
           props = _this2.props;
 
       var shouldRenderSuggestions = props.shouldRenderSuggestions || _this.shouldRenderSuggestions;
-      return !(0, _isEqual2.default)(props.suggestions, nextProps.suggestions) || shouldRenderSuggestions(nextProps.query) || shouldRenderSuggestions(nextProps.query) != shouldRenderSuggestions(props.query);
+      return props.isFocused !== nextProps.isFocused || !(0, _isEqual2.default)(props.suggestions, nextProps.suggestions) || shouldRenderSuggestions(nextProps.query) || shouldRenderSuggestions(nextProps.query) != shouldRenderSuggestions(props.query);
     }, _this.componentDidUpdate = function (prevProps) {
       var suggestionsContainer = _this.refs.suggestionsContainer;
       var _this$props = _this.props,
@@ -79,8 +79,8 @@ var Suggestions = function (_Component) {
       var _this3 = _this,
           props = _this3.props;
 
-      var minQueryLength = props.minQueryLength || 2;
-      return query.length >= minQueryLength;
+      var minQueryLength = Number.isInteger(props.minQueryLength) ? props.minQueryLength : 2;
+      return query.length >= minQueryLength && props.isFocused;
     }, _this.render = function () {
       var _this4 = _this,
           props = _this4.props;
@@ -130,6 +130,7 @@ Suggestions.propTypes = {
   handleHover: _propTypes2.default.func.isRequired,
   minQueryLength: _propTypes2.default.number,
   shouldRenderSuggestions: _propTypes2.default.func,
-  classNames: _propTypes2.default.object
+  classNames: _propTypes2.default.object,
+  isFocused: _propTypes2.default.bool.isRequired
 };
 exports.default = Suggestions;

@@ -72,10 +72,12 @@ var ReactTags = function (_Component) {
     _this.state = {
       suggestions: _this.props.suggestions,
       query: "",
+      isFocused: false,
       selectedIndex: -1,
       selectionMode: false
     };
 
+    _this.handleFocus = _this.handleFocus.bind(_this);
     _this.handleBlur = _this.handleBlur.bind(_this);
     _this.handleKeyDown = _this.handleKeyDown.bind(_this);
     _this.handleChange = _this.handleChange.bind(_this);
@@ -97,19 +99,19 @@ var ReactTags = function (_Component) {
   }, {
     key: "resetAndFocusInput",
     value: function resetAndFocusInput() {
+      this.textInput.value = "";
+      this.textInput.focus();
+    }
+  }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
       var _props = this.props,
           autofocus = _props.autofocus,
           readOnly = _props.readOnly;
 
       if (autofocus && !readOnly) {
-        this.textInput.value = "";
-        this.textInput.focus();
+        this.resetAndFocusInput();
       }
-    }
-  }, {
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      this.resetAndFocusInput();
     }
   }, {
     key: "filteredSuggestions",
@@ -167,6 +169,12 @@ var ReactTags = function (_Component) {
         this.props.handleInputBlur(value);
         this.textInput.value = "";
       }
+      this.setState({ isFocused: false });
+    }
+  }, {
+    key: "handleFocus",
+    value: function handleFocus() {
+      this.setState({ isFocused: true });
     }
   }, {
     key: "handleKeyDown",
@@ -350,6 +358,7 @@ var ReactTags = function (_Component) {
           type: "text",
           placeholder: placeholder,
           "aria-label": placeholder,
+          onFocus: this.handleFocus,
           onBlur: this.handleBlur,
           onChange: this.handleChange,
           onKeyDown: this.handleKeyDown,
@@ -366,6 +375,7 @@ var ReactTags = function (_Component) {
           handleHover: this.handleSuggestionHover,
           minQueryLength: this.props.minQueryLength,
           shouldRenderSuggestions: this.props.shouldRenderSuggestions,
+          isFocused: this.state.isFocused,
           classNames: this.state.classNames
         })
       ) : null;
